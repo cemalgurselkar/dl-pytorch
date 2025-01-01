@@ -3,7 +3,14 @@
 ## Why this repo was created:
 **The goal of this repository is to write deep learning models from scratch using pytorch.**
 
-
+## Content:
++ GRU
++ LSTM
++ RNN
++ CONV
++ BatchNorm
++ Dropout
++ MaxPooling
 
 **The required library to use the .py file in this repo:**
 ```python
