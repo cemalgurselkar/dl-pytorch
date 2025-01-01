@@ -12,14 +12,14 @@ class Conv1d:
     def __init__(self,in_channels,out_channels,kernel_size,stride=1,padding=1):
         self.in_channels = in_channels
         self.out_channels = out_channels
-        self.kernel_size = kernel_size
+        self.kernel_size = kernel_size[0] if isinstance(self.kernel_size,tuple) else kernel_size
         self.stride = stride
         self.padding = padding
 
         self.weights = torch.randn(out_channels,in_channels,kernel_size)
         self.bias = torch.randn(out_channels)
     
-    def forward(self,x):
+    def __call__(self,x):
         # Add padding to the input (only the last dimension)
         x_padded = F.pad(x,(self.padding, self.padding))
         
@@ -52,14 +52,14 @@ class Conv2d:
     def __init__(self,in_channel,out_channel,kernel_size,stride=1,padding=1):
         self.in_channel = in_channel
         self.out_channel = out_channel
-        self.kernel_size = kernel_size
+        self.kernel_size = kernel_size[0] if isinstance(self.kernel_size, tuple) else kernel_size
         self.stride = stride
         self.padding = padding
 
         self.weights = torch.randn(out_channel, in_channel, kernel_size, kernel_size)
         self.bias = torch.randn(out_channel)
     
-    def forward(self,x):
+    def __call__(self,x):
         #Add padding to the input (last two dimension)
         x_padded = F.pad(x,(self.padding,self.padding,self.padding,self.padding))
 
@@ -97,14 +97,14 @@ class Conv3d:
     def __init__(self,in_channel,out_channel,kernel_size,stride=1,padding=1):
         self.in_channel = in_channel
         self.out_channel = out_channel
-        self.kernel_size = kernel_size
+        self.kernel_size = kernel_size[0] if isinstance(self.kernel_size, tuple) else kernel_size
         self.stride = stride
         self.padding = padding
 
         self.weight = torch.randn(out_channel,in_channel,kernel_size,kernel_size,kernel_size)
         self.bias = torch.randn(out_channel)
     
-    def forward(self,x):
+    def __call__(self,x):
         x_padded = F.pad(x,(self.padding,self.padding,self.padding,self.padding,self.padding,self.padding))
 
         batch_size, in_channel, in_depth,in_height, in_width = x_padded.shape
@@ -129,3 +129,7 @@ class Conv3d:
                             patch = x_padded[b,:,d_start:d_end,h_start:h_end,w_start:w_end]
                             output[b,c_out,i,j,k] = torch.sum(patch * self.weight[c_out]) + self.bias[c_out]
         return output
+
+input = torch.randn(1,16,16)
+model = Conv1d(16,8,3)
+print(model(input))
